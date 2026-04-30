@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mun Jeongwon — Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #7fb5b5;
+      --grid-line: rgba(255,255,255,0.18);
+      --navy: #0d1b2a;
+      --navy2: #112233;
+      --white: #ffffff;
+      --text-dark: #0d1b2a;
+      --text-light: #c8dce0;
+      --text-muted: #7a9aaa;
+      --red: #ff5f57;
+      --yellow: #febc2e;
+      --green: #28c840;
+      --mono: 'DM Mono', monospace;
+      --radius: 14px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bg);
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 48px 48px;
+      font-family: var(--mono);
+      min-height: 100vh;
+      color: var(--text-dark);
+    }
+
+    .dots {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+      margin-bottom: 1.2rem;
+    }
+    .dot { width: 13px; height: 13px; border-radius: 50%; }
+    .dot-r { background: var(--red); }
+    .dot-y { background: var(--yellow); }
+    .dot-g { background: var(--green); }
+
+    .window {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 1.4rem 1.8rem 1.8rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+    }
+    .window-dark {
+      background: var(--navy);
+      color: var(--text-light);
+    }
+
+    /* Nav */
+    nav {
+      position: fixed;
+      top: 2rem;
+      right: 2.5rem;
+      z-index: 100;
+      display: flex;
+      gap: 0.75rem;
+    }
+    .nav-btn {
+      background: var(--navy);
+      color: var(--text-light);
+      border-radius: 10px;
+      padding: 0.6rem 1.1rem 0.75rem;
+      text-decoration: none;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      transition: background 0.2s, transform 0.15s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .nav-btn:hover { background: var(--navy2); transform: translateY(-2px); }
+    .nav-btn .dots { margin-bottom: 0.3rem; }
+
+    /* Hero */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 5rem 3rem 4rem;
+      gap: 2.5rem;
+    }
+    .hero-card { flex: 1.4; max-width: 580px; padding: 2.2rem 2.8rem 2.8rem; }
+    .hero-card h1 {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+    .hero-card .tagline {
+      font-size: 1rem;
+      color: #4a6670;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+    .hero-card .tagline::before { content: '→'; }
+    .hero-card .bio {
+      font-size: 0.85rem;
+      color: #5a7a86;
+      line-height: 1.8;
+      max-width: 400px;
+    }
+    .hero-links { display: flex; gap: 0.75rem; margin-top: 2rem; flex-wrap: wrap; }
+    .pill {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 6px;
+      text-decoration: none;
+      border: 1.5px solid #ccdde2;
+      color: #4a6670;
+      transition: all 0.2s;
+    }
+    .pill:hover { border-color: var(--navy); color: var(--navy); }
+
+    .hero-photo { flex: 0.9; max-width: 300px; padding: 0.5rem; }
+    .photo-placeholder {
+      width: 100%;
+      aspect-ratio: 4/3;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+    .photo-placeholder .sky {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, #a8d8ea 0%, #c8ecf5 100%);
+    }
+    .photo-placeholder .hills {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 45%;
+      background: linear-gradient(160deg, #5aac76 0%, #3d8b58 100%);
+      border-radius: 60% 60% 0 0;
+    }
+    .photo-placeholder .cloud {
+      position: absolute; top: 28%; left: 50%; transform: translateX(-50%);
+      width: 60px; height: 24px; background: white;
+      border-radius: 50px;
+      box-shadow: -20px 6px 0 -4px white, 22px 4px 0 -2px white;
+      opacity: 0.9;
+    }
+    .photo-label {
+      position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+      font-size: 0.7rem; color: rgba(255,255,255,0.9); white-space: nowrap; z-index: 1;
+      background: rgba(0,0,0,0.15); padding: 2px 8px; border-radius: 4px;
+    }
+
+    /* Sections */
+    .page-section { padding: 4rem 3rem; max-width: 1100px; margin: 0 auto; }
+    .section-title {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      color: var(--navy);
+      margin-bottom: 2.5rem;
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+    }
+    .section-title .code-tag { color: #7a9aaa; font-size: 0.6em; }
+
+    /* Projects */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+    .project-card {
+      padding: 1.4rem 1.6rem 2rem;
+      min-height: 260px;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .project-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.25); }
+    .project-num { font-size: 0.78rem; color: var(--text-muted); margin-bottom: auto; }
+    .project-footer { margin-top: 2rem; }
+    .project-title { font-size: 1.1rem; font-weight: 500; color: var(--text-light); margin-bottom: 0.5rem; }
+    .project-desc { font-size: 0.75rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 1rem; }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .project-tag {
+      font-size: 0.65rem; padding: 0.2rem 0.55rem;
+      border: 1px solid #1e3448; color: var(--text-muted); border-radius: 4px;
+    }
+    .project-links-row { display: flex; gap: 1rem; margin-top: 0.75rem; }
+    .project-link { font-size: 0.7rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .project-link:hover { color: #b8dde0; }
+
+    /* Experiences */
+    .exp-list { display: flex; flex-direction: column; gap: 1rem; }
+    .exp-card { padding: 1.6rem 2rem; display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; }
+    .exp-role { font-size: 1rem; font-weight: 500; color: var(--text-dark); margin-bottom: 0.3rem; }
+    .exp-company { font-size: 0.8rem; color: #4a6670; }
+    .exp-desc { font-size: 0.78rem; color: #5a7a86; line-height: 1.7; max-width: 500px; margin-top: 0.6rem; }
+    .exp-year { font-size: 0.75rem; color: #7a9aaa; white-space: nowrap; padding-top: 0.15rem; }
+
+    /* Side hustles */
+    .hustle-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+    .hustle-card { padding: 1.6rem 2rem; }
+    .hustle-title { font-size: 1rem; font-weight: 500; color: var(--text-dark); margin-bottom: 0.4rem; }
+    .hustle-desc { font-size: 0.8rem; color: #5a7a86; line-height: 1.7; }
+
+    /* Contact */
+    #contact { padding: 4rem 3rem 6rem; max-width: 1100px; margin: 0 auto; }
+    .contact-card { padding: 3rem; text-align: center; }
+    .contact-card h2 { font-size: clamp(1.5rem, 4vw, 2.4rem); font-weight: 400; margin-bottom: 0.75rem; }
+    .contact-card p { color: #4a6670; font-size: 0.85rem; margin-bottom: 2rem; }
+    .contact-card a.btn-main {
+      display: inline-block; background: var(--navy); color: var(--text-light);
+      padding: 0.75rem 2rem; border-radius: 8px; text-decoration: none;
+      font-size: 0.85rem; transition: background 0.2s, transform 0.15s;
+    }
+    .contact-card a.btn-main:hover { background: var(--navy2); transform: translateY(-2px); }
+    .contact-socials { display: flex; justify-content: center; gap: 1.5rem; margin-top: 1.5rem; }
+    .contact-socials a { font-size: 0.75rem; color: #7a9aaa; text-decoration: none; transition: color 0.2s; }
+    .contact-socials a:hover { color: var(--navy); }
+
+    footer { text-align: center; padding: 1.5rem; font-size: 0.7rem; color: rgba(255,255,255,0.45); }
+
+    /* Animations */
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.55s ease, transform 0.55s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* Responsive */
+    @media (max-width: 860px) {
+      nav { top: 1rem; right: 1rem; gap: 0.4rem; }
+      .nav-btn { padding: 0.5rem 0.7rem 0.6rem; font-size: 0.7rem; }
+      #hero { flex-direction: column; padding: 7rem 1.5rem 3rem; }
+      .hero-card, .hero-photo { max-width: 100%; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .hustle-grid { grid-template-columns: 1fr; }
+      .page-section { padding: 3rem 1.5rem; }
+      .exp-card { flex-direction: column; gap: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="#contact" class="nav-btn">
+      <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+      contact
+    </a>
+    <a href="#projects" class="nav-btn">
+      <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+      projects
+    </a>
+    <a href="#experiences" class="nav-btn">
+      <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+      experiences
+    </a>
+    <a href="#hustles" class="nav-btn">
+      <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+      side hustles
+    </a>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero">
+    <div class="window hero-card reveal">
+      <div class="dots">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+      </div>
+      <h1>Hi, I'm Jeongwon!</h1>
+      <p class="tagline">a software engineer who builds things</p>
+      <p class="bio">
+        I like working across the stack — from databases to UIs to deployment.
+        Currently interested in developer tooling, distributed systems, and
+        anything that ships fast.
+      </p>
+      <div class="hero-links">
+        <a href="https://github.com/yourusername" class="pill" target="_blank">github ↗</a>
+        <a href="https://linkedin.com/in/yourusername" class="pill" target="_blank">linkedin ↗</a>
+        <a href="mailto:you@email.com" class="pill">email</a>
+        <a href="/resume.pdf" class="pill" download>resume ↓</a>
+      </div>
+    </div>
+
+    <div class="window hero-photo reveal" style="transition-delay:0.15s">
+      <div class="dots">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+      </div>
+      <img src="myphoto.jpg" alt="Jeongwon" style="width: 100%; aspect-ratio: 4/3; border-radius: 8px; display: block; object-fit: cover;" />
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="page-section" id="projects">
+    <h2 class="section-title reveal">projects <span class="code-tag">&lt;/&gt;</span></h2>
+    <div class="projects-grid">
+
+      <div class="window window-dark project-card reveal">
+        <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+        <span class="project-num">project 1</span>
+        <div class="project-footer">
+          <div class="project-title">Your Best Project</div>
+          <div class="project-desc">What does it do and why does it matter? Keep this punchy — one or two lines.</div>
+          <div class="project-tags">
+            <span class="project-tag">React</span><span class="project-tag">Node.js</span><span class="project-tag">Postgres</span>
+          </div>
+          <div class="project-links-row">
+            <a href="#" class="project-link">github ↗</a>
+            <a href="#" class="project-link">live ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="window window-dark project-card reveal" style="transition-delay:0.1s">
+        <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+        <span class="project-num">project 2</span>
+        <div class="project-footer">
+          <div class="project-title">Second Project</div>
+          <div class="project-desc">Short description of what this is and the problem it solves.</div>
+          <div class="project-tags">
+            <span class="project-tag">Python</span><span class="project-tag">FastAPI</span><span class="project-tag">Redis</span>
+          </div>
+          <div class="project-links-row">
+            <a href="#" class="project-link">github ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="window window-dark project-card reveal" style="transition-delay:0.2s">
+        <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+        <span class="project-num">project 3</span>
+        <div class="project-footer">
+          <div class="project-title">Third Project</div>
+          <div class="project-desc">What was the interesting challenge here? Technical curiosity is compelling.</div>
+          <div class="project-tags">
+            <span class="project-tag">Go</span><span class="project-tag">Docker</span><span class="project-tag">gRPC</span>
+          </div>
+          <div class="project-links-row">
+            <a href="#" class="project-link">github ↗</a>
+            <a href="#" class="project-link">live ↗</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Experiences -->
+  <section class="page-section" id="experiences">
+    <h2 class="section-title reveal">experiences <span class="code-tag">{ }</span></h2>
+    <div class="exp-list">
+
+      <div class="window exp-card reveal">
+        <div class="exp-left">
+          <div class="exp-role">Software Engineer Intern</div>
+          <div class="exp-company">Company Name</div>
+          <div class="exp-desc">What did you build or work on? One to two sentences on impact or scope. Numbers help: "reduced load time by 40%" beats "improved performance".</div>
+        </div>
+        <div class="exp-year">Summer 2024</div>
+      </div>
+
+      <div class="window exp-card reveal">
+        <div class="exp-left">
+          <div class="exp-role">Freelance Developer</div>
+          <div class="exp-company">Self-employed</div>
+          <div class="exp-desc">Built and shipped client projects. Describe what kinds of work or industries, and what the outcomes were.</div>
+        </div>
+        <div class="exp-year">2023 – present</div>
+      </div>
+
+      <div class="window exp-card reveal">
+        <div class="exp-left">
+          <div class="exp-role">Teaching Assistant</div>
+          <div class="exp-company">Your University · CS Dept</div>
+          <div class="exp-desc">Mentored students in data structures and algorithms. Held office hours and graded assignments for a class of 120.</div>
+        </div>
+        <div class="exp-year">2023</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Side hustles -->
+  <section class="page-section" id="hustles">
+    <h2 class="section-title reveal">side hustles <span class="code-tag">~</span></h2>
+    <div class="hustle-grid">
+
+      <div class="window hustle-card reveal">
+        <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+        <div class="hustle-title">Open Source Contributions</div>
+        <div class="hustle-desc">Contributed to [project name]. Fixed a gnarly bug in the networking layer, merged upstream. Link to PRs if you have them.</div>
+      </div>
+
+      <div class="window hustle-card reveal" style="transition-delay:0.1s">
+        <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+        <div class="hustle-title">Tech Blog / Writing</div>
+        <div class="hustle-desc">I write occasionally about things I learn while building. Topics: distributed systems, debugging stories, tooling opinions.</div>
+      </div>
+
+      <div class="window hustle-card reveal">
+        <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+        <div class="hustle-title">Hackathon Projects</div>
+        <div class="hustle-desc">Placed 2nd at [Hackathon Name] with a team of 3. Built a real-time collaborative tool in 24 hours using WebSockets.</div>
+      </div>
+
+      <div class="window hustle-card reveal" style="transition-delay:0.1s">
+        <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+        <div class="hustle-title">Something Else You Do</div>
+        <div class="hustle-desc">Could be a Discord bot, a browser extension, a CLI tool, a game jam entry — anything you built for fun.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="window contact-card reveal">
+      <div class="dots" style="justify-content:center; margin-bottom:1.5rem">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+      </div>
+      <h2>Let's work together</h2>
+      <p>Open to full-time roles, internships, and interesting freelance projects.</p>
+      <a href="mailto:you@email.com" class="btn-main">get in touch →</a>
+      <div class="contact-socials">
+        <a href="https://github.com/yourusername" target="_blank">github ↗</a>
+        <a href="https://linkedin.com/in/yourusername" target="_blank">linkedin ↗</a>
+        <a href="mailto:you@email.com">you@email.com</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>© 2025 Mun Jeongwon · built by hand, no frameworks</footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 70);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
