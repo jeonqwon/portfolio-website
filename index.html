@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mun Jeongwon — Developer</title>
+  <title>Your Name — Developer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet" />
   <style>
@@ -90,33 +90,56 @@
       min-height: 100vh;
       display: flex;
       align-items: center;
+      justify-content: center;
       padding: 5rem 3rem 4rem;
-      gap: 2.5rem;
     }
-    .hero-card { flex: 1.4; max-width: 580px; padding: 2.2rem 2.8rem 2.8rem; }
+    .hero-card {
+      width: 100%;
+      max-width: 860px;
+      padding: 2.2rem 2.8rem 2.8rem;
+    }
+    .hero-inner {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+    .hero-photo-inline {
+      flex-shrink: 0;
+      width: 160px;
+      height: 160px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .hero-photo-inline img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .hero-text { flex: 1; }
     .hero-card h1 {
-      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
       font-weight: 400;
       letter-spacing: -0.01em;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
       line-height: 1.2;
     }
     .hero-card .tagline {
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: #4a6670;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      margin-bottom: 2rem;
+      margin-bottom: 0;
     }
     .hero-card .tagline::before { content: '→'; }
     .hero-card .bio {
       font-size: 0.85rem;
       color: #5a7a86;
       line-height: 1.8;
-      max-width: 400px;
+      margin-top: 1.5rem;
     }
-    .hero-links { display: flex; gap: 0.75rem; margin-top: 2rem; flex-wrap: wrap; }
+    .hero-links { display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
     .pill {
       font-family: var(--mono);
       font-size: 0.75rem;
@@ -128,36 +151,6 @@
       transition: all 0.2s;
     }
     .pill:hover { border-color: var(--navy); color: var(--navy); }
-
-    .hero-photo { flex: 0.9; max-width: 300px; padding: 0.5rem; }
-    .photo-placeholder {
-      width: 100%;
-      aspect-ratio: 4/3;
-      border-radius: 8px;
-      overflow: hidden;
-      position: relative;
-    }
-    .photo-placeholder .sky {
-      position: absolute; inset: 0;
-      background: linear-gradient(180deg, #a8d8ea 0%, #c8ecf5 100%);
-    }
-    .photo-placeholder .hills {
-      position: absolute; bottom: 0; left: 0; right: 0; height: 45%;
-      background: linear-gradient(160deg, #5aac76 0%, #3d8b58 100%);
-      border-radius: 60% 60% 0 0;
-    }
-    .photo-placeholder .cloud {
-      position: absolute; top: 28%; left: 50%; transform: translateX(-50%);
-      width: 60px; height: 24px; background: white;
-      border-radius: 50px;
-      box-shadow: -20px 6px 0 -4px white, 22px 4px 0 -2px white;
-      opacity: 0.9;
-    }
-    .photo-label {
-      position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
-      font-size: 0.7rem; color: rgba(255,255,255,0.9); white-space: nowrap; z-index: 1;
-      background: rgba(0,0,0,0.15); padding: 2px 8px; border-radius: 4px;
-    }
 
     /* Sections */
     .page-section { padding: 4rem 3rem; max-width: 1100px; margin: 0 auto; }
@@ -276,27 +269,20 @@
       <div class="dots">
         <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
       </div>
-      <h1>Hi, I'm Jeongwon!</h1>
-      <p class="tagline">a software engineer who builds things</p>
+      <div class="hero-inner">
+        <div class="hero-photo-inline">
+          <img src="myphoto.jpg" alt="Jeongwon" />
+        </div>
+        <div class="hero-text">
+          <h1>Hi, I'm Jeongwon!</h1>
+          <p class="tagline">Y2 CS student at NTU</p>
+        </div>
+      </div>
       <p class="bio">
         I like working across the stack — from databases to UIs to deployment.
         Currently interested in developer tooling, distributed systems, and
         anything that ships fast.
       </p>
-      <div class="hero-links">
-        <a href="https://github.com/yourusername" class="pill" target="_blank">github ↗</a>
-        <a href="https://linkedin.com/in/yourusername" class="pill" target="_blank">linkedin ↗</a>
-        <a href="mailto:you@email.com" class="pill">email</a>
-        <a href="/resume.pdf" class="pill" download>resume ↓</a>
-      </div>
-    </div>
-
-    <div class="window hero-photo reveal" style="transition-delay:0.15s">
-      <div class="dots">
-        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
-      </div>
-      <img src="myphoto.jpg" alt="Jeongwon" style="width: 100%; aspect-ratio: 4/3; border-radius: 8px; display: block; object-fit: cover;" />
-    </div>
   </section>
 
   <!-- Projects -->
@@ -438,7 +424,7 @@
     </div>
   </section>
 
-  <footer>© 2025 Mun Jeongwon · built by hand, no frameworks</footer>
+  <footer>© 2025 Your Name · built by hand, no frameworks</footer>
 
   <script>
     const observer = new IntersectionObserver((entries) => {
