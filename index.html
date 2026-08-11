@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Your Name — Developer</title>
+  <title>Mun Jeongwon — Developer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet" />
   <style>
@@ -23,6 +23,15 @@
       --green: #28c840;
       --mono: 'DM Mono', monospace;
       --radius: 14px;
+    }
+
+    /* DM Mono ships no CJK glyphs — append system CJK faces per language so
+       Latin stays mono and Chinese/Korean render in a native face. */
+    html[data-lang="zh"] {
+      --mono: 'DM Mono', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+    }
+    html[data-lang="ko"] {
+      --mono: 'DM Mono', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
     }
 
     html { scroll-behavior: smooth; }
@@ -67,6 +76,9 @@
       right: 2.5rem;
       z-index: 100;
       display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      max-width: calc(100vw - 3rem);
       gap: 0.75rem;
     }
     .nav-btn {
@@ -84,6 +96,31 @@
     }
     .nav-btn:hover { background: var(--navy2); transform: translateY(-2px); }
     .nav-btn .dots { margin-bottom: 0.3rem; }
+
+    /* Language switcher */
+    .lang-switch {
+      display: flex;
+      align-items: stretch;
+      gap: 2px;
+      background: var(--navy);
+      border-radius: 10px;
+      padding: 3px;
+      align-self: flex-start;
+    }
+    .lang-btn {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      line-height: 1;
+      padding: 0.5rem 0.6rem;
+      border: none;
+      background: transparent;
+      color: #6f8a99;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .lang-btn:hover { color: var(--text-light); }
+    .lang-btn.active { background: var(--white); color: var(--navy); }
 
     /* Hero */
     #hero {
@@ -166,6 +203,51 @@
     }
     .section-title .code-tag { color: var(--navy); font-size: 0.6em; }
 
+    /* Project filter bar */
+    .filter-bar { padding: 1.1rem 1.6rem 1.3rem; margin-bottom: 1rem; }
+    .filter-bar .dots { margin-bottom: 0.9rem; }
+    .filter-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.85rem;
+      flex-wrap: wrap;
+    }
+    .filter-label { font-size: 0.75rem; color: #4a6670; }
+    .filter-count { font-size: 0.7rem; color: var(--text-muted); white-space: nowrap; }
+    .filter-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .filter-chip {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      line-height: 1.4;
+      padding: 0.3rem 0.7rem;
+      border: 1px solid #ccdde2;
+      background: var(--white);
+      color: #4a6670;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
+    }
+    .filter-chip:hover { border-color: var(--navy); color: var(--navy); }
+    .filter-chip.active {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: var(--text-light);
+    }
+    .chip-count { font-size: 0.62rem; opacity: 0.65; }
+
+    .no-results {
+      padding: 2rem 2.5rem;
+      font-size: 0.8rem;
+      color: #5a7a86;
+      text-align: center;
+    }
+    .no-results[hidden] { display: none; }
+
     /* Projects — stacked layout */
     .projects-list { display: flex; flex-direction: column; gap: 1rem; }
     .project-card {
@@ -175,6 +257,7 @@
       gap: 0.5rem;
       transition: transform 0.2s, box-shadow 0.2s;
     }
+    .project-card[hidden] { display: none; }
     .project-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
     .project-left { display: flex; flex-direction: column; gap: 0.4rem; }
     .project-right { display: none; }
@@ -183,9 +266,15 @@
     .project-desc { font-size: 0.78rem; color: #5a7a86; line-height: 1.7; max-width: 620px; margin-top: 0.2rem; }
     .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.75rem; }
     .project-tag {
+      font-family: var(--mono);
       font-size: 0.65rem; padding: 0.2rem 0.55rem;
       border: 1px solid #ccdde2; color: var(--text-dark); border-radius: 4px;
+      background: var(--white);
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
     }
+    .project-tag:hover { border-color: var(--navy); }
+    .project-tag.active { background: var(--navy); border-color: var(--navy); color: var(--text-light); }
     .project-links-row { display: flex; gap: 1rem; margin-top: 0.4rem; }
     .project-link { font-size: 0.7rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
     .project-link:hover { color: var(--navy); }
@@ -198,7 +287,7 @@
     .exp-desc { font-size: 0.78rem; color: #5a7a86; line-height: 1.7; max-width: 500px; margin-top: 0.6rem; }
     .exp-year { font-size: 0.75rem; color: #7a9aaa; white-space: nowrap; padding-top: 0.15rem; }
 
-  
+
 
     /* Side hustles */
     .hustle-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
@@ -229,8 +318,9 @@
 
     /* Responsive */
     @media (max-width: 860px) {
-      nav { top: 1rem; right: 1rem; gap: 0.4rem; }
+      nav { top: 1rem; right: 1rem; gap: 0.4rem; max-width: calc(100vw - 2rem); }
       .nav-btn { padding: 0.5rem 0.7rem 0.6rem; font-size: 0.7rem; }
+      .lang-btn { padding: 0.4rem 0.5rem; font-size: 0.7rem; }
       #hero { padding: 7rem 1.5rem 3rem; }
       .hero-inner { flex-direction: column; }
       .projects-list, .hustle-grid { grid-template-columns: 1fr; }
@@ -245,25 +335,30 @@
 <body>
 
   <nav>
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button type="button" class="lang-btn" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" class="lang-btn" data-lang="zh" aria-pressed="false" lang="zh">中文</button>
+      <button type="button" class="lang-btn" data-lang="ko" aria-pressed="false" lang="ko">한국어</button>
+    </div>
     <a href="#contact" class="nav-btn">
       <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
-      contact
+      <span data-i18n="nav.contact">contact</span>
     </a>
     <a href="#projects" class="nav-btn">
       <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
-      projects
+      <span data-i18n="nav.projects">projects</span>
     </a>
     <a href="#experiences" class="nav-btn">
       <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
-      experiences
+      <span data-i18n="nav.experiences">experiences</span>
     </a>
     <a href="#certifications" class="nav-btn">
       <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
-      certifications
+      <span data-i18n="nav.certifications">certifications</span>
     </a>
     <a href="#hustles" class="nav-btn">
       <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
-      side hustles
+      <span data-i18n="nav.hustles">side hustles</span>
     </a>
   </nav>
 
@@ -278,11 +373,11 @@
           <img src="myphoto.jpg" alt="Jeongwon" />
         </div>
         <div class="hero-text">
-          <h1>Hi, I'm Jeongwon!</h1>
-          <p class="tagline">Y2 Computer Science student at NTU</p>
+          <h1 data-i18n="hero.greeting">Hi, I'm Jeongwon!</h1>
+          <p class="tagline"><span data-i18n="hero.tagline">Y2 Computer Science student at NTU</span></p>
         </div>
       </div>
-      <p class="bio">
+      <p class="bio" data-i18n="hero.bio">
         I like working across the stack — from databases to UIs to deployment. Open to roles in software engineering, AI product management as well as business development.
       </p>
     </div>
@@ -290,16 +385,31 @@
 
   <!-- Projects -->
   <section class="page-section" id="projects">
-    <h2 class="section-title reveal">projects <span class="code-tag">&lt;/&gt;</span></h2>
+    <h2 class="section-title reveal"><span data-i18n="section.projects">projects</span> <span class="code-tag">&lt;/&gt;</span></h2>
+
+    <div class="window filter-bar reveal">
+      <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+      <div class="filter-head">
+        <span class="filter-label" data-i18n="filter.label">filter by stack</span>
+        <span class="filter-count" id="filter-count"></span>
+      </div>
+      <div class="filter-chips" id="filter-chips">
+        <button type="button" class="filter-chip active" data-tag="" aria-pressed="true">
+          <span data-i18n="filter.all">all</span>
+        </button>
+      </div>
+    </div>
+
     <div class="projects-list">
 
       <div class="window project-card reveal">
         <div class="project-left">
-          <div class="project-num">SQL Data Analytics Personal Project</div>
-          <div class="project-title">E-Commerce User Retention & Engagement Analytics</div>
-          <div class="project-desc">Built a 3-layer PostgreSQL data pipeline across 100k+ orders, peforming data cleaning on 9,000 bad rows and aggregating to daily/monthly grain.</div>
+          <div class="project-num" data-i18n="p1.num">SQL Data Analytics Personal Project</div>
+          <div class="project-title" data-i18n="p1.title">E-Commerce User Retention &amp; Engagement Analytics</div>
+          <div class="project-desc" data-i18n="p1.desc">Built a 3-layer PostgreSQL data pipeline across 100k+ orders, performing data cleaning on 9,000 bad rows and aggregating to daily/monthly grain.</div>
           <div class="project-tags">
-            <span class="project-tag">SQL</span>
+            <button type="button" class="project-tag">SQL</button>
+            <button type="button" class="project-tag">PostgreSQL</button>
           </div>
           <div class="project-links-row">
             <a href="https://github.com/jeonqwon/ecommerce-sql-analytics.git" class="project-link">github ↗</a>
@@ -309,14 +419,14 @@
 
       <div class="window project-card reveal">
         <div class="project-left">
-          <div class="project-num">SC4031 IoT Project</div>
-          <div class="project-title">Banana Ripeness Detector App</div>
-          <div class="project-desc">Built an end-to-end IoT system that classifies banana ripeness in real time by offloading AI inference from an IoT device to Google Cloud.</div>
+          <div class="project-num" data-i18n="p2.num">SC4031 IoT Project</div>
+          <div class="project-title" data-i18n="p2.title">Banana Ripeness Detector App</div>
+          <div class="project-desc" data-i18n="p2.desc">Built an end-to-end IoT system that classifies banana ripeness in real time by offloading AI inference from an IoT device to Google Cloud.</div>
           <div class="project-tags">
-            <span class="project-tag">Flutter</span>
-            <span class="project-tag">Python/Flask</span>
-            <span class="project-tag">TensorFlow</span>
-            <span class="project-tag">MobileNetV2</span>
+            <button type="button" class="project-tag">Flutter</button>
+            <button type="button" class="project-tag">Python/Flask</button>
+            <button type="button" class="project-tag">TensorFlow</button>
+            <button type="button" class="project-tag">MobileNetV2</button>
           </div>
           <div class="project-links-row">
             <a href="https://github.com/jeonqwon/banana_ripeness_detector.git" class="project-link">github ↗</a>
@@ -327,15 +437,15 @@
 
       <div class="window project-card reveal">
         <div class="project-left">
-          <div class="project-num">SC2006 Software Engineering Project</div>
+          <div class="project-num" data-i18n="p3.num">SC2006 Software Engineering Project</div>
           <div class="project-title">VibeChecker</div>
-          <div class="project-desc">A school finder app that helps students discover their ideal school and explore the amenities around it. Combines official data, interactive maps, CCA filters as well as a community review and rating system.</div>
+          <div class="project-desc" data-i18n="p3.desc">A school finder app that helps students discover their ideal school and explore the amenities around it. Combines official data, interactive maps, CCA filters as well as a community review and rating system.</div>
           <div class="project-tags">
-            <span class="project-tag">React</span>
-            <span class="project-tag">Node.js</span>
-            <span class="project-tag">MongoDB</span>
-            <span class="project-tag">JWT</span>
-            <span class="project-tag">OneMap API</span>
+            <button type="button" class="project-tag">React</button>
+            <button type="button" class="project-tag">Node.js</button>
+            <button type="button" class="project-tag">MongoDB</button>
+            <button type="button" class="project-tag">JWT</button>
+            <button type="button" class="project-tag">OneMap API</button>
           </div>
           <div class="project-links-row">
             <a href="https://youtu.be/N4oaX7Ozsvs" class="project-link">live ↗</a>
@@ -345,18 +455,18 @@
 
       <div class="window project-card reveal">
         <div class="project-left">
-          <div class="project-num">iNTUition Hackathon</div>
+          <div class="project-num" data-i18n="p4.num">iNTUition Hackathon</div>
           <div class="project-title">Bank Buddy</div>
-          <div class="project-desc">An accessible banking app with voice navigation (Web Speech API), real-time gesture recognition (TensorFlow.js) and multi-language support across 13 languages.</div>
+          <div class="project-desc" data-i18n="p4.desc">An accessible banking app with voice navigation (Web Speech API), real-time gesture recognition (TensorFlow.js) and multi-language support across 13 languages.</div>
           <div class="project-tags">
-            <span class="project-tag">Next.js</span>
-            <span class="project-tag">TypeScript</span>
-            <span class="project-tag">MongoDB</span>
-            <span class="project-tag">TensorFlow.js</span>
-            <span class="project-tag">Web Speech API</span>
-            <span class="project-tag">TailwindCSS</span>
-            <span class="project-tag">MyMemory Translation API</span>
-            <span class="project-tag">React</span>
+            <button type="button" class="project-tag">Next.js</button>
+            <button type="button" class="project-tag">TypeScript</button>
+            <button type="button" class="project-tag">MongoDB</button>
+            <button type="button" class="project-tag">TensorFlow.js</button>
+            <button type="button" class="project-tag">Web Speech API</button>
+            <button type="button" class="project-tag">TailwindCSS</button>
+            <button type="button" class="project-tag">MyMemory Translation API</button>
+            <button type="button" class="project-tag">React</button>
           </div>
           <div class="project-links-row">
             <a href="https://github.com/br4ndonlo0/iNTUtion.git" class="project-link">github ↗</a>
@@ -364,21 +474,23 @@
         </div>
       </div>
 
+      <div class="window no-results" id="no-results" hidden data-i18n="filter.none">No projects match that filter.</div>
+
     </div>
   </section>
 
   <!-- Experiences -->
   <section class="page-section" id="experiences">
-    <h2 class="section-title reveal">work experiences <span class="code-tag">{ }</span></h2>
+    <h2 class="section-title reveal"><span data-i18n="section.experiences">work experiences</span> <span class="code-tag">{ }</span></h2>
     <div class="exp-list">
 
   <div class="window exp-card reveal">
     <div class="exp-left">
-      <div class="exp-role">HR Recruitment Consultant Intern</div>
+      <div class="exp-role" data-i18n="e1.role">HR Recruitment Consultant Intern</div>
       <div class="exp-company">Recruit Express</div>
-      <div class="exp-desc">Screened and shortlisted ~10 candidates daily, coordinated 15+ interviews and streamlined recruitment workflows using digital tools and internal databases.</div>
+      <div class="exp-desc" data-i18n="e1.desc">Screened and shortlisted ~10 candidates daily, coordinated 15+ interviews and streamlined recruitment workflows using digital tools and internal databases.</div>
     </div>
-    <div class="exp-year" style="font-size: 0.8rem; color: #4a6670;">April 2024 – June 2024</div>
+    <div class="exp-year" style="font-size: 0.8rem; color: #4a6670;" data-i18n="e1.year">April 2024 – June 2024</div>
   </div>
 
     </div>
@@ -386,7 +498,7 @@
 
   <!-- Certifications -->
   <section class="page-section" id="certifications">
-    <h2 class="section-title reveal">certifications <span class="code-tag">#</span></h2>
+    <h2 class="section-title reveal"><span data-i18n="section.certifications">certifications</span> <span class="code-tag">#</span></h2>
     <div class="exp-list">
 
       <div class="window exp-card reveal">
@@ -408,7 +520,7 @@
       <div class="window exp-card reveal">
         <div class="exp-left">
           <img src="Hubspot Social Media Marketing.jpeg" alt="hubspot" style="width:100%; border-radius:8px; margin-bottom:0.75rem;" />
-          <div class="exp-role">Social Media Marketing</div>
+          <div class="exp-role" data-i18n="c3.name">Social Media Marketing</div>
           <div class="exp-company">HubSpot Academy</div>
         </div>
       </div>
@@ -418,35 +530,35 @@
 
   <!-- Side hustles -->
   <section class="page-section" id="hustles">
-    <h2 class="section-title reveal">side hustles <span class="code-tag">/*</span></h2>
+    <h2 class="section-title reveal"><span data-i18n="section.hustles">side hustles</span> <span class="code-tag">/*</span></h2>
     <div class="hustle-grid">
 
     <div class="window hustle-card reveal">
       <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
       <img src="tchoukballm18.jpeg" alt="Tchoukball" style="width:100%; border-radius:8px; margin-bottom:0.75rem;" />
-      <div class="hustle-title">Tchoukball Centre of Excellence, National Team</div>
-      <div class="hustle-desc">Represented Singapore to compete in the 6th World Youth Tchoukball Championships under the M18 girl’s category and attained 1st place.</div>
+      <div class="hustle-title" data-i18n="h1.title">Tchoukball Centre of Excellence, National Team</div>
+      <div class="hustle-desc" data-i18n="h1.desc">Represented Singapore to compete in the 6th World Youth Tchoukball Championships under the M18 girl’s category and attained 1st place.</div>
     </div>
 
       <div class="window hustle-card reveal" style="transition-delay:0.1s">
         <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
         <img src="dnd.jpeg" alt="DnD" style="width:100%; border-radius:8px; margin-bottom:0.75rem;" />
-        <div class="hustle-title">Hall 10 Dinner and Dance Main Committee</div>
-        <div class="hustle-desc">Vice President</div>
+        <div class="hustle-title" data-i18n="h2.title">Hall 10 Dinner and Dance Main Committee</div>
+        <div class="hustle-desc" data-i18n="h2.desc">Vice President</div>
       </div>
 
       <div class="window hustle-card reveal">
         <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
         <img src="ntutb.jpeg" alt="Tchoukball" style="width:100%; border-radius:8px; margin-bottom:0.75rem;" />
-        <div class="hustle-title">NTU Varsity Tchoukball</div>
-        <div class="hustle-desc">Represented NTU in external tertiary competitions such as SUNIG and ITC, attaining 2 Runner up in AY 2024/2025 and Champions in AY 2025/2026.</div>
+        <div class="hustle-title" data-i18n="h3.title">NTU Varsity Tchoukball</div>
+        <div class="hustle-desc" data-i18n="h3.desc">Represented NTU in external tertiary competitions such as SUNIG and ITC, attaining 2 Runner up in AY 2024/2025 and Champions in AY 2025/2026.</div>
       </div>
 
       <div class="window hustle-card reveal" style="transition-delay:0.1s">
         <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
         <img src="uoc.jpeg" alt="UOC" style="width:100%; border-radius:8px; margin-bottom:0.75rem;" />
-        <div class="hustle-title">Union Orientation Committee</div>
-        <div class="hustle-desc">Assistant Guild Leader (Safety)</div>
+        <div class="hustle-title" data-i18n="h4.title">Union Orientation Committee</div>
+        <div class="hustle-desc" data-i18n="h4.desc">Assistant Guild Leader (Safety)</div>
       </div>
 
     </div>
@@ -458,13 +570,13 @@
       <div class="dots" style="justify-content:center; margin-bottom:1.5rem">
         <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
       </div>
-      <h2>Let's work together!</h2>
-      <p>Open to internships or any freelance projects</p>
-      <a href="MunJeongwon_Resume.pdf" class="btn-main" download>resume ↓</a>
+      <h2 data-i18n="contact.heading">Let's work together!</h2>
+      <p data-i18n="contact.sub">Open to internships or any freelance projects</p>
+      <a href="MunJeongwon_Resume.pdf" class="btn-main" download data-i18n="contact.resume">resume ↓</a>
       <div class="contact-socials">
         <a href="https://github.com/jeonqwon" target="_blank">github ↗</a>
         <a href="http://www.linkedin.com/in/mun-jeongwon-82023a25a" target="_blank">linkedin ↗</a>
-        <a href="mailto:munjeongwonn@gmail.com">email ↗</a>
+        <a href="mailto:munjeongwonn@gmail.com" data-i18n="contact.email">email ↗</a>
       </div>
     </div>
   </section>
@@ -472,6 +584,328 @@
   <footer>© 2025 Mun Jeongwon</footer>
 
   <script>
+    /* ---------------------------------------------------------------
+       i18n — EN / ZH / KO
+       Tech tags, brand and product names stay untranslated on purpose.
+       --------------------------------------------------------------- */
+    const LANGS = ['en', 'zh', 'ko'];
+    const HTML_LANG = { en: 'en', zh: 'zh-CN', ko: 'ko' };
+
+    const I18N = {
+      en: {
+        'meta.title': 'Mun Jeongwon — Developer',
+        'nav.contact': 'contact',
+        'nav.projects': 'projects',
+        'nav.experiences': 'experiences',
+        'nav.certifications': 'certifications',
+        'nav.hustles': 'side hustles',
+        'hero.greeting': "Hi, I'm Jeongwon!",
+        'hero.tagline': 'Y2 Computer Science student at NTU',
+        'hero.bio': 'I like working across the stack — from databases to UIs to deployment. Open to roles in software engineering, AI product management as well as business development.',
+        'section.projects': 'projects',
+        'section.experiences': 'work experiences',
+        'section.certifications': 'certifications',
+        'section.hustles': 'side hustles',
+        'filter.label': 'filter by stack',
+        'filter.all': 'all',
+        'filter.none': 'No projects match that filter.',
+        'filter.count': 'showing {n} / {total}',
+        'p1.num': 'SQL Data Analytics Personal Project',
+        'p1.title': 'E-Commerce User Retention & Engagement Analytics',
+        'p1.desc': 'Built a 3-layer PostgreSQL data pipeline across 100k+ orders, performing data cleaning on 9,000 bad rows and aggregating to daily/monthly grain.',
+        'p2.num': 'SC4031 IoT Project',
+        'p2.title': 'Banana Ripeness Detector App',
+        'p2.desc': 'Built an end-to-end IoT system that classifies banana ripeness in real time by offloading AI inference from an IoT device to Google Cloud.',
+        'p3.num': 'SC2006 Software Engineering Project',
+        'p3.desc': 'A school finder app that helps students discover their ideal school and explore the amenities around it. Combines official data, interactive maps, CCA filters as well as a community review and rating system.',
+        'p4.num': 'iNTUition Hackathon',
+        'p4.desc': 'An accessible banking app with voice navigation (Web Speech API), real-time gesture recognition (TensorFlow.js) and multi-language support across 13 languages.',
+        'e1.role': 'HR Recruitment Consultant Intern',
+        'e1.desc': 'Screened and shortlisted ~10 candidates daily, coordinated 15+ interviews and streamlined recruitment workflows using digital tools and internal databases.',
+        'e1.year': 'April 2024 – June 2024',
+        'c3.name': 'Social Media Marketing',
+        'h1.title': 'Tchoukball Centre of Excellence, National Team',
+        'h1.desc': 'Represented Singapore to compete in the 6th World Youth Tchoukball Championships under the M18 girl’s category and attained 1st place.',
+        'h2.title': 'Hall 10 Dinner and Dance Main Committee',
+        'h2.desc': 'Vice President',
+        'h3.title': 'NTU Varsity Tchoukball',
+        'h3.desc': 'Represented NTU in external tertiary competitions such as SUNIG and ITC, attaining 2 Runner up in AY 2024/2025 and Champions in AY 2025/2026.',
+        'h4.title': 'Union Orientation Committee',
+        'h4.desc': 'Assistant Guild Leader (Safety)',
+        'contact.heading': "Let's work together!",
+        'contact.sub': 'Open to internships or any freelance projects',
+        'contact.resume': 'resume ↓',
+        'contact.email': 'email ↗'
+      },
+      zh: {
+        'meta.title': 'Mun Jeongwon — 开发者',
+        'nav.contact': '联系',
+        'nav.projects': '项目',
+        'nav.experiences': '工作经历',
+        'nav.certifications': '证书',
+        'nav.hustles': '课外活动',
+        'hero.greeting': '你好，我是 Jeongwon！',
+        'hero.tagline': '南洋理工大学 (NTU) 计算机科学系二年级学生',
+        'hero.bio': '我喜欢全栈开发 —— 从数据库到用户界面再到部署。目前正在寻找软件工程、AI 产品管理以及商务拓展方向的机会。',
+        'section.projects': '项目',
+        'section.experiences': '工作经历',
+        'section.certifications': '证书',
+        'section.hustles': '课外活动',
+        'filter.label': '按技术栈筛选',
+        'filter.all': '全部',
+        'filter.none': '没有符合该筛选条件的项目。',
+        'filter.count': '显示 {n} / {total}',
+        'p1.num': 'SQL 数据分析个人项目',
+        'p1.title': '电商用户留存与参与度分析',
+        'p1.desc': '构建了三层 PostgreSQL 数据管道，处理 10 万+ 订单，清洗 9,000 条异常数据，并按日／月粒度进行聚合。',
+        'p2.num': 'SC4031 物联网项目',
+        'p2.title': '香蕉成熟度检测应用',
+        'p2.desc': '构建了端到端物联网系统，将 AI 推理从物联网设备卸载至 Google Cloud，实时判别香蕉成熟度。',
+        'p3.num': 'SC2006 软件工程项目',
+        'p3.desc': '帮助学生寻找理想学校并了解周边设施的选校应用。整合官方数据、交互式地图、社团 (CCA) 筛选以及社区评价与评分系统。',
+        'p4.num': 'iNTUition 黑客松',
+        'p4.desc': '无障碍银行应用，支持语音导航 (Web Speech API)、实时手势识别 (TensorFlow.js) 以及 13 种语言的多语言支持。',
+        'e1.role': '人力资源招聘顾问实习生',
+        'e1.desc': '每天筛选约 10 位候选人，协调 15 场以上面试，并借助数字工具与内部数据库优化招聘流程。',
+        'e1.year': '2024 年 4 月 – 2024 年 6 月',
+        'c3.name': '社交媒体营销',
+        'h1.title': 'Tchoukball Centre of Excellence 国家队',
+        'h1.desc': '代表新加坡参加第六届世界青年巧固球锦标赛 M18 女子组，并获得冠军。',
+        'h2.title': 'Hall 10 晚宴舞会主委会',
+        'h2.desc': '副主席',
+        'h3.title': 'NTU 校队巧固球',
+        'h3.desc': '代表 NTU 参加 SUNIG、ITC 等校际赛事，于 2024/2025 学年获得 2nd Runner-up，2025/2026 学年夺得冠军。',
+        'h4.title': '学生会迎新委员会',
+        'h4.desc': '助理团长（安全）',
+        'contact.heading': '一起合作吧！',
+        'contact.sub': '欢迎实习与自由职业项目的合作机会',
+        'contact.resume': '简历 ↓',
+        'contact.email': '邮箱 ↗'
+      },
+      ko: {
+        'meta.title': 'Mun Jeongwon — 개발자',
+        'nav.contact': '연락처',
+        'nav.projects': '프로젝트',
+        'nav.experiences': '경력',
+        'nav.certifications': '자격증',
+        'nav.hustles': '대외활동',
+        'hero.greeting': '안녕하세요, Jeongwon입니다!',
+        'hero.tagline': '난양공과대학교(NTU) 컴퓨터공학 2학년',
+        'hero.bio': '데이터베이스부터 UI, 배포까지 스택 전반을 다루는 것을 좋아합니다. 소프트웨어 엔지니어링, AI 프로덕트 매니지먼트, 비즈니스 개발 분야의 기회를 찾고 있습니다.',
+        'section.projects': '프로젝트',
+        'section.experiences': '경력',
+        'section.certifications': '자격증',
+        'section.hustles': '대외활동',
+        'filter.label': '기술 스택으로 필터',
+        'filter.all': '전체',
+        'filter.none': '해당 필터에 맞는 프로젝트가 없습니다.',
+        'filter.count': '{total}개 중 {n}개 표시',
+        'p1.num': 'SQL 데이터 분석 개인 프로젝트',
+        'p1.title': '이커머스 사용자 리텐션 & 인게이지먼트 분석',
+        'p1.desc': '10만 건 이상의 주문을 처리하는 3계층 PostgreSQL 데이터 파이프라인을 구축하고, 9,000건의 오류 데이터를 정제해 일/월 단위로 집계했습니다.',
+        'p2.num': 'SC4031 IoT 프로젝트',
+        'p2.title': '바나나 숙성도 판별 앱',
+        'p2.desc': 'IoT 기기의 AI 추론을 Google Cloud로 오프로딩하여 바나나 숙성도를 실시간으로 분류하는 엔드투엔드 IoT 시스템을 구축했습니다.',
+        'p3.num': 'SC2006 소프트웨어 공학 프로젝트',
+        'p3.desc': '학생들이 자신에게 맞는 학교를 찾고 주변 편의시설까지 살펴볼 수 있는 학교 탐색 앱입니다. 공공 데이터, 인터랙티브 지도, CCA 필터, 커뮤니티 리뷰 및 평점 시스템을 결합했습니다.',
+        'p4.num': 'iNTUition 해커톤',
+        'p4.desc': '음성 내비게이션(Web Speech API), 실시간 제스처 인식(TensorFlow.js), 13개 언어 지원을 갖춘 접근성 중심 뱅킹 앱입니다.',
+        'e1.role': 'HR 리크루팅 컨설턴트 인턴',
+        'e1.desc': '매일 약 10명의 지원자를 검토·선별하고 15회 이상의 면접을 조율했으며, 디지털 도구와 사내 데이터베이스를 활용해 채용 프로세스를 개선했습니다.',
+        'e1.year': '2024년 4월 – 2024년 6월',
+        'c3.name': '소셜 미디어 마케팅',
+        'h1.title': 'Tchoukball Centre of Excellence 국가대표',
+        'h1.desc': '제6회 세계 유스 추크볼 선수권대회 M18 여자부에 싱가포르 대표로 출전해 1위를 차지했습니다.',
+        'h2.title': 'Hall 10 디너 앤 댄스 주최 위원회',
+        'h2.desc': '부회장',
+        'h3.title': 'NTU 대표팀 추크볼',
+        'h3.desc': 'SUNIG, ITC 등 대학 대항전에 NTU 대표로 출전해 2024/2025학년도 2nd Runner-up, 2025/2026학년도 우승을 차지했습니다.',
+        'h4.title': '학생회 오리엔테이션 위원회',
+        'h4.desc': '부단장 (안전 담당)',
+        'contact.heading': '함께 일해요!',
+        'contact.sub': '인턴십 및 프리랜스 프로젝트 기회를 찾고 있습니다',
+        'contact.resume': '이력서 ↓',
+        'contact.email': '이메일 ↗'
+      }
+    };
+
+    let currentLang = 'en';
+
+    function t(key) {
+      const dict = I18N[currentLang] || I18N.en;
+      return dict[key] !== undefined ? dict[key] : (I18N.en[key] || '');
+    }
+
+    function detectLang() {
+      // Explicit ?lang= wins, so a localized link can be shared directly.
+      try {
+        const q = new URLSearchParams(window.location.search).get('lang');
+        if (LANGS.indexOf(q) !== -1) return q;
+      } catch (e) { /* malformed query — fall through */ }
+      try {
+        const saved = localStorage.getItem('portfolio-lang');
+        if (LANGS.indexOf(saved) !== -1) return saved;
+      } catch (e) { /* storage blocked — fall through */ }
+      const nav = (navigator.language || 'en').toLowerCase();
+      if (nav.indexOf('zh') === 0) return 'zh';
+      if (nav.indexOf('ko') === 0) return 'ko';
+      return 'en';
+    }
+
+    function applyLang(lang) {
+      currentLang = LANGS.indexOf(lang) !== -1 ? lang : 'en';
+      document.documentElement.lang = HTML_LANG[currentLang];
+      document.documentElement.dataset.lang = currentLang;
+      document.title = t('meta.title');
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        el.textContent = t(el.dataset.i18n);
+      });
+
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        const on = btn.dataset.lang === currentLang;
+        btn.classList.toggle('active', on);
+        btn.setAttribute('aria-pressed', String(on));
+      });
+
+      try { localStorage.setItem('portfolio-lang', currentLang); } catch (e) { /* ignore */ }
+      updateFilterCount();
+      syncUrl();
+    }
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+    });
+
+    /* ---------------------------------------------------------------
+       Project stack filter
+       Chips are derived from the .project-tag buttons already in the
+       markup, so adding a tag to a card adds its chip automatically.
+       --------------------------------------------------------------- */
+    const cards = Array.prototype.slice.call(document.querySelectorAll('.project-card'));
+    const chipsRow = document.getElementById('filter-chips');
+    const allChip = chipsRow.querySelector('[data-tag=""]');
+    const countEl = document.getElementById('filter-count');
+    const noResults = document.getElementById('no-results');
+
+    const cardTags = new Map();
+    const tagCounts = new Map();
+
+    cards.forEach(card => {
+      const tags = Array.prototype.slice
+        .call(card.querySelectorAll('.project-tag'))
+        .map(el => el.textContent.trim());
+      cardTags.set(card, tags);
+      tags.forEach(tag => tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1));
+    });
+
+    // Most-used stacks first, then alphabetical — recruiters scan the top row.
+    const orderedTags = Array.from(tagCounts.keys()).sort((a, b) => {
+      return (tagCounts.get(b) - tagCounts.get(a)) || a.localeCompare(b);
+    });
+
+    const active = new Set();
+
+    orderedTags.forEach(tag => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'filter-chip';
+      chip.dataset.tag = tag;
+      chip.setAttribute('aria-pressed', 'false');
+      chip.innerHTML = '<span></span><span class="chip-count"></span>';
+      chip.firstChild.textContent = tag;
+      chip.lastChild.textContent = tagCounts.get(tag);
+      chip.addEventListener('click', () => toggleTag(tag));
+      chipsRow.appendChild(chip);
+    });
+
+    document.querySelectorAll('.project-tag').forEach(el => {
+      el.addEventListener('click', () => toggleTag(el.textContent.trim()));
+    });
+
+    allChip.addEventListener('click', () => {
+      active.clear();
+      applyFilter();
+    });
+
+    function toggleTag(tag) {
+      if (active.has(tag)) active.delete(tag);
+      else active.add(tag);
+      applyFilter();
+    }
+
+    function updateFilterCount() {
+      if (!countEl) return;
+      let shown = 0;
+      cards.forEach(card => { if (!card.hidden) shown++; });
+      countEl.textContent = t('filter.count')
+        .replace('{n}', shown)
+        .replace('{total}', cards.length);
+    }
+
+    function syncUrl() {
+      const tags = Array.from(active);
+      try {
+        const url = new URL(window.location.href);
+        if (tags.length) url.searchParams.set('stack', tags.join(','));
+        else url.searchParams.delete('stack');
+        // English is the default, so leave it out and keep the URL clean.
+        if (currentLang !== 'en') url.searchParams.set('lang', currentLang);
+        else url.searchParams.delete('lang');
+        history.replaceState(null, '', url.toString());
+      } catch (e) { /* file:// or blocked history — filtering still works */ }
+    }
+
+    function applyFilter() {
+      let shown = 0;
+
+      cards.forEach(card => {
+        const tags = cardTags.get(card);
+        const match = active.size === 0 || tags.some(tag => active.has(tag));
+        card.hidden = !match;
+        if (match) {
+          shown++;
+          // A card revealed by a filter change may never have crossed the
+          // observer threshold — make sure it is not stuck at opacity 0.
+          card.classList.add('visible');
+        }
+      });
+
+      chipsRow.querySelectorAll('.filter-chip[data-tag]').forEach(chip => {
+        const tag = chip.dataset.tag;
+        if (tag === '') return;
+        const on = active.has(tag);
+        chip.classList.toggle('active', on);
+        chip.setAttribute('aria-pressed', String(on));
+      });
+
+      allChip.classList.toggle('active', active.size === 0);
+      allChip.setAttribute('aria-pressed', String(active.size === 0));
+
+      document.querySelectorAll('.project-tag').forEach(el => {
+        el.classList.toggle('active', active.has(el.textContent.trim()));
+      });
+
+      noResults.hidden = shown > 0;
+      updateFilterCount();
+      syncUrl();
+    }
+
+    // Shareable filtered links: ?stack=SQL,React
+    try {
+      const preset = new URLSearchParams(window.location.search).get('stack');
+      if (preset) {
+        preset.split(',').forEach(raw => {
+          const tag = raw.trim();
+          if (tagCounts.has(tag)) active.add(tag);
+        });
+      }
+    } catch (e) { /* ignore malformed query */ }
+
+    applyLang(detectLang());
+    applyFilter();
+
+    /* --------------------------------------------------------------- */
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry, i) => {
         if (entry.isIntersecting) {
