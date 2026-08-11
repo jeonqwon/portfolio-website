@@ -204,7 +204,12 @@
     .section-title .code-tag { color: var(--navy); font-size: 0.6em; }
 
     /* Project filter bar */
-    .filter-bar { padding: 1.1rem 1.6rem 1.3rem; margin-bottom: 1rem; }
+    .filter-bar {
+      padding: 1.1rem 1.6rem 1.3rem;
+      margin-bottom: 1rem;
+      background: var(--navy);
+      color: var(--text-light);
+    }
     .filter-bar .dots { margin-bottom: 0.9rem; }
     .filter-head {
       display: flex;
@@ -214,17 +219,16 @@
       margin-bottom: 0.85rem;
       flex-wrap: wrap;
     }
-    .filter-label { font-size: 0.75rem; color: #4a6670; }
-    .filter-count { font-size: 0.7rem; color: var(--text-muted); white-space: nowrap; }
+    .filter-label { font-size: 0.75rem; color: var(--text-light); }
     .filter-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
     .filter-chip {
       font-family: var(--mono);
       font-size: 0.7rem;
       line-height: 1.4;
       padding: 0.3rem 0.7rem;
-      border: 1px solid #ccdde2;
-      background: var(--white);
-      color: #4a6670;
+      border: 1px solid #354a5c;
+      background: transparent;
+      color: var(--text-light);
       border-radius: 6px;
       cursor: pointer;
       display: inline-flex;
@@ -232,11 +236,12 @@
       gap: 0.4rem;
       transition: background 0.18s, color 0.18s, border-color 0.18s;
     }
-    .filter-chip:hover { border-color: var(--navy); color: var(--navy); }
+    /* Chips sit on the navy card, so the palette is inverted: active is light. */
+    .filter-chip:hover { border-color: var(--white); color: var(--white); }
     .filter-chip.active {
-      background: var(--navy);
-      border-color: var(--navy);
-      color: var(--text-light);
+      background: var(--white);
+      border-color: var(--white);
+      color: var(--navy);
     }
     .chip-count { font-size: 0.62rem; opacity: 0.65; }
 
@@ -280,8 +285,19 @@
     .project-link:hover { color: var(--navy); }
 
     /* Experiences */
+    .exp-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.75rem; }
+    .exp-tag {
+      font-family: var(--mono);
+      font-size: 0.65rem; padding: 0.2rem 0.55rem;
+      border: 1px solid #ccdde2; color: var(--text-dark); border-radius: 4px;
+      background: var(--white);
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
+    }
+    .exp-tag.active { background: var(--navy); border-color: var(--navy); color: var(--text-light); }
     .exp-list { display: flex; flex-direction: column; gap: 1rem; }
     .exp-card { padding: 1.6rem 2rem; display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; }
+    /* .exp-card sets display:flex, which beats the UA rule for [hidden]. */
+    .exp-card[hidden] { display: none; }
     .exp-role { font-size: 1rem; font-weight: 500; color: var(--text-dark); margin-bottom: 0.3rem; }
     .exp-company { font-size: 0.8rem; color: #4a6670; }
     .exp-desc { font-size: 0.78rem; color: #5a7a86; line-height: 1.7; max-width: 500px; margin-top: 0.6rem; }
@@ -391,7 +407,6 @@
       <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
       <div class="filter-head">
         <span class="filter-label" data-i18n="filter.label">filter by stack</span>
-        <span class="filter-count" id="filter-count"></span>
       </div>
       <div class="filter-chips" id="filter-chips">
         <button type="button" class="filter-chip active" data-tag="" aria-pressed="true">
@@ -486,12 +501,36 @@
 
   <div class="window exp-card reveal">
     <div class="exp-left">
+      <div class="exp-role" data-i18n="e2.role">Software Engineering Intern</div>
+      <div class="exp-company">AIP Venture Partners</div>
+      <div class="exp-desc" data-i18n="e2.desc">Built an automated fund administration platform (Next.js, Supabase) to replace manual workflows, applied fund accounting knowledge to align calculations with regulatory and audit requirements, and designed an intuitive interface for daily use by fund admins.</div>
+      <div class="exp-tags">
+        <span class="exp-tag">Next.js</span>
+        <span class="exp-tag">React</span>
+        <span class="exp-tag">TypeScript</span>
+        <span class="exp-tag">Supabase</span>
+        <span class="exp-tag">PostgreSQL</span>
+        <span class="exp-tag">REST APIs</span>
+        <span class="exp-tag">SQL</span>
+        <span class="exp-tag">Claude API (LLM)</span>
+        <span class="exp-tag">Netlify</span>
+        <span class="exp-tag">DocuSign API</span>
+        <span class="exp-tag">Gmail API</span>
+      </div>
+    </div>
+    <div class="exp-year" style="font-size: 0.8rem; color: #4a6670;" data-i18n="e2.year">May 2026 – August 2026</div>
+  </div>
+
+  <div class="window exp-card reveal">
+    <div class="exp-left">
       <div class="exp-role" data-i18n="e1.role">HR Recruitment Consultant Intern</div>
       <div class="exp-company">Recruit Express</div>
       <div class="exp-desc" data-i18n="e1.desc">Screened and shortlisted ~10 candidates daily, coordinated 15+ interviews and streamlined recruitment workflows using digital tools and internal databases.</div>
     </div>
     <div class="exp-year" style="font-size: 0.8rem; color: #4a6670;" data-i18n="e1.year">April 2024 – June 2024</div>
   </div>
+
+      <div class="window no-results" id="no-results-exp" hidden data-i18n="filter.noneExp">No experience matches that filter.</div>
 
     </div>
   </section>
@@ -609,7 +648,7 @@
         'filter.label': 'filter by stack',
         'filter.all': 'all',
         'filter.none': 'No projects match that filter.',
-        'filter.count': 'showing {n} / {total}',
+        'filter.noneExp': 'No experience matches that filter.',
         'p1.num': 'SQL Data Analytics Personal Project',
         'p1.title': 'E-Commerce User Retention & Engagement Analytics',
         'p1.desc': 'Built a 3-layer PostgreSQL data pipeline across 100k+ orders, performing data cleaning on 9,000 bad rows and aggregating to daily/monthly grain.',
@@ -623,6 +662,9 @@
         'e1.role': 'HR Recruitment Consultant Intern',
         'e1.desc': 'Screened and shortlisted ~10 candidates daily, coordinated 15+ interviews and streamlined recruitment workflows using digital tools and internal databases.',
         'e1.year': 'April 2024 – June 2024',
+        'e2.role': 'Software Engineering Intern',
+        'e2.desc': 'Built an automated fund administration platform (Next.js, Supabase) to replace manual workflows, applied fund accounting knowledge to align calculations with regulatory and audit requirements, and designed an intuitive interface for daily use by fund admins.',
+        'e2.year': 'May 2026 – August 2026',
         'c3.name': 'Social Media Marketing',
         'h1.title': 'Tchoukball Centre of Excellence, National Team',
         'h1.desc': 'Represented Singapore to compete in the 6th World Youth Tchoukball Championships under the M18 girl’s category and attained 1st place.',
@@ -654,7 +696,7 @@
         'filter.label': '按技术栈筛选',
         'filter.all': '全部',
         'filter.none': '没有符合该筛选条件的项目。',
-        'filter.count': '显示 {n} / {total}',
+        'filter.noneExp': '没有符合该筛选条件的工作经历。',
         'p1.num': 'SQL 数据分析个人项目',
         'p1.title': '电商用户留存与参与度分析',
         'p1.desc': '构建了三层 PostgreSQL 数据管道，处理 10 万+ 订单，清洗 9,000 条异常数据，并按日／月粒度进行聚合。',
@@ -668,6 +710,9 @@
         'e1.role': '人力资源招聘顾问实习生',
         'e1.desc': '每天筛选约 10 位候选人，协调 15 场以上面试，并借助数字工具与内部数据库优化招聘流程。',
         'e1.year': '2024 年 4 月 – 2024 年 6 月',
+        'e2.role': '软件工程实习生',
+        'e2.desc': '构建了自动化基金行政管理平台（Next.js、Supabase），取代原有的人工流程；运用基金会计知识使各项计算符合监管与审计要求，并设计了供基金行政人员日常使用的直观界面。',
+        'e2.year': '2026 年 5 月 – 2026 年 8 月',
         'c3.name': '社交媒体营销',
         'h1.title': 'Tchoukball Centre of Excellence 国家队',
         'h1.desc': '代表新加坡参加第六届世界青年巧固球锦标赛 M18 女子组，并获得冠军。',
@@ -699,7 +744,7 @@
         'filter.label': '기술 스택으로 필터',
         'filter.all': '전체',
         'filter.none': '해당 필터에 맞는 프로젝트가 없습니다.',
-        'filter.count': '{total}개 중 {n}개 표시',
+        'filter.noneExp': '해당 필터에 맞는 경력이 없습니다.',
         'p1.num': 'SQL 데이터 분석 개인 프로젝트',
         'p1.title': '이커머스 사용자 리텐션 & 인게이지먼트 분석',
         'p1.desc': '10만 건 이상의 주문을 처리하는 3계층 PostgreSQL 데이터 파이프라인을 구축하고, 9,000건의 오류 데이터를 정제해 일/월 단위로 집계했습니다.',
@@ -713,6 +758,9 @@
         'e1.role': 'HR 리크루팅 컨설턴트 인턴',
         'e1.desc': '매일 약 10명의 지원자를 검토·선별하고 15회 이상의 면접을 조율했으며, 디지털 도구와 사내 데이터베이스를 활용해 채용 프로세스를 개선했습니다.',
         'e1.year': '2024년 4월 – 2024년 6월',
+        'e2.role': '소프트웨어 엔지니어링 인턴',
+        'e2.desc': '수작업 프로세스를 대체하는 자동화 펀드 행정 플랫폼(Next.js, Supabase)을 구축했고, 펀드 회계 지식을 적용해 각종 계산이 규제 및 감사 요건에 부합하도록 했으며, 펀드 관리자가 매일 사용할 수 있는 직관적인 인터페이스를 설계했습니다.',
+        'e2.year': '2026년 5월 – 2026년 8월',
         'c3.name': '소셜 미디어 마케팅',
         'h1.title': 'Tchoukball Centre of Excellence 국가대표',
         'h1.desc': '제6회 세계 유스 추크볼 선수권대회 M18 여자부에 싱가포르 대표로 출전해 1위를 차지했습니다.',
@@ -769,7 +817,6 @@
       });
 
       try { localStorage.setItem('portfolio-lang', currentLang); } catch (e) { /* ignore */ }
-      updateFilterCount();
       syncUrl();
     }
 
@@ -779,25 +826,33 @@
 
     /* ---------------------------------------------------------------
        Project stack filter
-       Chips are derived from the .project-tag buttons already in the
-       markup, so adding a tag to a card adds its chip automatically.
+       Chips are derived from the tags already in the markup, so adding a tag
+       to a project or experience card adds its chip automatically. Both card
+       types are filterable, so every chip always resolves to a visible card.
        --------------------------------------------------------------- */
     const cards = Array.prototype.slice.call(document.querySelectorAll('.project-card'));
+    // Scoped to #experiences: the certifications section reuses .exp-card and
+    // must never be filtered away.
+    const expCards = Array.prototype.slice
+      .call(document.querySelectorAll('#experiences .exp-card'));
     const chipsRow = document.getElementById('filter-chips');
     const allChip = chipsRow.querySelector('[data-tag=""]');
-    const countEl = document.getElementById('filter-count');
     const noResults = document.getElementById('no-results');
+    const noResultsExp = document.getElementById('no-results-exp');
 
     const cardTags = new Map();
     const tagCounts = new Map();
 
-    cards.forEach(card => {
+    function indexCard(card, tagSelector) {
       const tags = Array.prototype.slice
-        .call(card.querySelectorAll('.project-tag'))
+        .call(card.querySelectorAll(tagSelector))
         .map(el => el.textContent.trim());
       cardTags.set(card, tags);
       tags.forEach(tag => tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1));
-    });
+    }
+
+    cards.forEach(card => indexCard(card, '.project-tag'));
+    expCards.forEach(card => indexCard(card, '.exp-tag'));
 
     // Most-used stacks first, then alphabetical — recruiters scan the top row.
     const orderedTags = Array.from(tagCounts.keys()).sort((a, b) => {
@@ -834,15 +889,6 @@
       applyFilter();
     }
 
-    function updateFilterCount() {
-      if (!countEl) return;
-      let shown = 0;
-      cards.forEach(card => { if (!card.hidden) shown++; });
-      countEl.textContent = t('filter.count')
-        .replace('{n}', shown)
-        .replace('{total}', cards.length);
-    }
-
     function syncUrl() {
       const tags = Array.from(active);
       try {
@@ -857,19 +903,24 @@
     }
 
     function applyFilter() {
-      let shown = 0;
+      function applyTo(list) {
+        let shown = 0;
+        list.forEach(card => {
+          const tags = cardTags.get(card);
+          const match = active.size === 0 || tags.some(tag => active.has(tag));
+          card.hidden = !match;
+          if (match) {
+            shown++;
+            // A card revealed by a filter change may never have crossed the
+            // observer threshold — make sure it is not stuck at opacity 0.
+            card.classList.add('visible');
+          }
+        });
+        return shown;
+      }
 
-      cards.forEach(card => {
-        const tags = cardTags.get(card);
-        const match = active.size === 0 || tags.some(tag => active.has(tag));
-        card.hidden = !match;
-        if (match) {
-          shown++;
-          // A card revealed by a filter change may never have crossed the
-          // observer threshold — make sure it is not stuck at opacity 0.
-          card.classList.add('visible');
-        }
-      });
+      const shown = applyTo(cards);
+      const shownExp = applyTo(expCards);
 
       chipsRow.querySelectorAll('.filter-chip[data-tag]').forEach(chip => {
         const tag = chip.dataset.tag;
@@ -882,12 +933,12 @@
       allChip.classList.toggle('active', active.size === 0);
       allChip.setAttribute('aria-pressed', String(active.size === 0));
 
-      document.querySelectorAll('.project-tag').forEach(el => {
+      document.querySelectorAll('.project-tag, .exp-tag').forEach(el => {
         el.classList.toggle('active', active.has(el.textContent.trim()));
       });
 
       noResults.hidden = shown > 0;
-      updateFilterCount();
+      if (noResultsExp) noResultsExp.hidden = shownExp > 0;
       syncUrl();
     }
 
